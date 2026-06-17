@@ -34,7 +34,6 @@
     padding: 0;
   }
 
-  /* ── HEADER ── */
   header {
     background: linear-gradient(135deg, var(--navy-mid) 0%, var(--navy-light) 100%);
     border-bottom: 2px solid var(--gold);
@@ -63,382 +62,125 @@
     margin-bottom: 6px;
   }
 
-  h1 {
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--white);
-    letter-spacing: -0.5px;
-  }
-
+  h1 { font-size: 26px; font-weight: 700; color: var(--white); letter-spacing: -0.5px; }
   h1 span { color: var(--gold); }
 
-  .progress-block {
-    text-align: right;
-  }
+  .progress-block { text-align: right; }
+  .progress-label { font-family: var(--mono); font-size: 11px; color: var(--silver); margin-bottom: 6px; }
+  .progress-bar-wrap { width: 200px; height: 8px; background: var(--navy); border-radius: 4px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); border-radius: 4px; transition: width 0.4s ease; }
+  .progress-pct { font-family: var(--mono); font-size: 20px; font-weight: 600; color: var(--gold-light); margin-top: 4px; }
 
-  .progress-label {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--silver);
-    margin-bottom: 6px;
-  }
-
-  .progress-bar-wrap {
-    width: 200px;
-    height: 8px;
-    background: var(--navy);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-
-  .progress-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--gold), var(--gold-light));
-    border-radius: 4px;
-    transition: width 0.4s ease;
-  }
-
-  .progress-pct {
-    font-family: var(--mono);
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--gold-light);
-    margin-top: 4px;
-  }
-
-  /* ── FUND TICKER BAR ── */
-  .ticker-bar {
-    background: var(--navy-mid);
-    border-bottom: 1px solid rgba(201,168,76,0.2);
-    overflow: hidden;
-    padding: 10px 0;
-  }
-
-  .ticker-inner {
-    display: flex;
-    gap: 40px;
-    animation: ticker 22s linear infinite;
-    white-space: nowrap;
-    width: max-content;
-  }
-
-  @keyframes ticker {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-
-  .ticker-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: var(--mono);
-    font-size: 12px;
-  }
-
+  .ticker-bar { background: var(--navy-mid); border-bottom: 1px solid rgba(201,168,76,0.2); overflow: hidden; padding: 10px 0; }
+  .ticker-inner { display: flex; gap: 40px; animation: ticker 22s linear infinite; white-space: nowrap; width: max-content; }
+  @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .ticker-item { display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 12px; }
   .ticker-fund { color: var(--gold); font-weight: 600; }
   .ticker-price { color: var(--white); }
   .ticker-change.up { color: var(--green); }
   .ticker-change.down { color: var(--red); }
   .ticker-dot { color: var(--silver); }
 
-  /* ── MAIN ── */
-  main {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 32px 24px 60px;
-  }
+  main { max-width: 1000px; margin: 0 auto; padding: 32px 24px 60px; }
 
-  /* ── FUND SNAPSHOT ── */
-  .snapshot-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 12px;
-    margin-bottom: 36px;
-  }
+  .snapshot-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 36px; }
 
   @media (max-width: 720px) {
     .snapshot-grid { grid-template-columns: repeat(3, 1fr); }
     header { padding: 20px; }
     h1 { font-size: 20px; }
   }
-  @media (max-width: 480px) {
-    .snapshot-grid { grid-template-columns: repeat(2, 1fr); }
-  }
+  @media (max-width: 480px) { .snapshot-grid { grid-template-columns: repeat(2, 1fr); } }
 
-  .fund-card {
-    background: var(--navy-mid);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 10px;
-    padding: 14px 12px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .fund-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-  }
-
+  .fund-card { background: var(--navy-mid); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 14px 12px; text-align: center; position: relative; overflow: hidden; }
+  .fund-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
   .fund-card.g::before { background: #4A9EFF; }
   .fund-card.f::before { background: #A78BFA; }
   .fund-card.c::before { background: #34D399; }
   .fund-card.s::before { background: #F59E0B; }
   .fund-card.i::before { background: #F472B6; }
-
-  .fund-name {
-    font-family: var(--mono);
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--white);
-  }
-
-  .fund-label {
-    font-size: 9px;
-    letter-spacing: 1px;
-    color: var(--silver);
-    text-transform: uppercase;
-    margin: 3px 0 8px;
-  }
-
-  .fund-price {
-    font-family: var(--mono);
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--white);
-  }
-
-  .fund-chg {
-    font-family: var(--mono);
-    font-size: 11px;
-    margin-top: 4px;
-  }
-
+  .fund-name { font-family: var(--mono); font-size: 18px; font-weight: 600; color: var(--white); }
+  .fund-label { font-size: 9px; letter-spacing: 1px; color: var(--silver); text-transform: uppercase; margin: 3px 0 8px; }
+  .fund-price { font-family: var(--mono); font-size: 15px; font-weight: 600; color: var(--white); }
+  .fund-chg { font-family: var(--mono); font-size: 11px; margin-top: 4px; }
   .fund-chg.up { color: var(--green); }
   .fund-chg.down { color: var(--red); }
 
-  /* ── SECTIONS ── */
-  .section {
-    margin-bottom: 28px;
-  }
-
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 14px;
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .section-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    flex-shrink: 0;
-  }
-
+  .section { margin-bottom: 28px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; cursor: pointer; user-select: none; }
+  .section-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
   .section-icon.blue   { background: rgba(74,158,255,0.15); }
   .section-icon.purple { background: rgba(167,139,250,0.15); }
   .section-icon.green  { background: rgba(52,211,153,0.15); }
   .section-icon.amber  { background: rgba(245,158,11,0.15); }
   .section-icon.pink   { background: rgba(244,114,182,0.15); }
-
   .section-meta { flex: 1; }
-
-  .section-title {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--white);
-  }
-
-  .section-sub {
-    font-size: 11px;
-    color: var(--silver);
-    margin-top: 2px;
-  }
-
-  .section-count {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--silver);
-    background: rgba(255,255,255,0.07);
-    padding: 2px 8px;
-    border-radius: 20px;
-  }
-
-  .collapse-arrow {
-    color: var(--silver);
-    font-size: 12px;
-    transition: transform 0.2s;
-  }
-
+  .section-title { font-size: 15px; font-weight: 600; color: var(--white); }
+  .section-sub { font-size: 11px; color: var(--silver); margin-top: 2px; }
+  .section-count { font-family: var(--mono); font-size: 11px; color: var(--silver); background: rgba(255,255,255,0.07); padding: 2px 8px; border-radius: 20px; }
+  .collapse-arrow { color: var(--silver); font-size: 12px; transition: transform 0.2s; }
   .section.collapsed .collapse-arrow { transform: rotate(-90deg); }
+  .section-body { display: flex; flex-direction: column; gap: 8px; overflow: hidden; transition: max-height 0.3s ease, opacity 0.3s; max-height: 2000px; opacity: 1; }
+  .section.collapsed .section-body { max-height: 0; opacity: 0; }
 
-  .section-body {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    overflow: hidden;
-    transition: max-height 0.3s ease, opacity 0.3s;
-    max-height: 2000px;
-    opacity: 1;
-  }
-
-  .section.collapsed .section-body {
-    max-height: 0;
-    opacity: 0;
-  }
-
-  /* ── CHECKLIST ITEM ── */
-  .item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    background: var(--navy-mid);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 10px;
-    padding: 14px 16px;
-    cursor: pointer;
-    transition: border-color 0.2s, background 0.2s;
-    position: relative;
-  }
-
-  .item:hover {
-    border-color: rgba(201,168,76,0.3);
-    background: rgba(201,168,76,0.04);
-  }
-
-  .item.checked {
-    background: rgba(46,204,113,0.05);
-    border-color: rgba(46,204,113,0.25);
-  }
-
-  .item.checked .item-title {
-    text-decoration: line-through;
-    color: var(--silver);
-  }
-
-  .checkbox {
-    width: 20px;
-    height: 20px;
-    border: 2px solid rgba(255,255,255,0.2);
-    border-radius: 5px;
-    flex-shrink: 0;
-    margin-top: 1px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.15s;
-    background: transparent;
-  }
-
-  .item.checked .checkbox {
-    background: var(--green);
-    border-color: var(--green);
-  }
-
-  .checkmark {
-    display: none;
-    color: white;
-    font-size: 12px;
-    font-weight: 700;
-  }
-
+  .item { display: flex; align-items: flex-start; gap: 12px; background: var(--navy-mid); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 14px 16px; cursor: pointer; transition: border-color 0.2s, background 0.2s; position: relative; }
+  .item:hover { border-color: rgba(201,168,76,0.3); background: rgba(201,168,76,0.04); }
+  .item.checked { background: rgba(46,204,113,0.05); border-color: rgba(46,204,113,0.25); }
+  .item.checked .item-title { text-decoration: line-through; color: var(--silver); }
+  .checkbox { width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.2); border-radius: 5px; flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; background: transparent; }
+  .item.checked .checkbox { background: var(--green); border-color: var(--green); }
+  .checkmark { display: none; color: white; font-size: 12px; font-weight: 700; }
   .item.checked .checkmark { display: block; }
-
   .item-content { flex: 1; min-width: 0; }
-
-  .item-title {
-    font-size: 13.5px;
-    font-weight: 500;
-    color: var(--white);
-    line-height: 1.4;
-    transition: color 0.2s;
-  }
-
-  .item-desc {
-    font-size: 11.5px;
-    color: var(--silver);
-    margin-top: 5px;
-    line-height: 1.5;
-  }
-
-  .item-tag {
-    display: inline-block;
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 1px;
-    padding: 2px 7px;
-    border-radius: 4px;
-    text-transform: uppercase;
-    margin-top: 6px;
-    margin-right: 4px;
-  }
-
+  .item-title { font-size: 13.5px; font-weight: 500; color: var(--white); line-height: 1.4; transition: color 0.2s; }
+  .item-desc { font-size: 11.5px; color: var(--silver); margin-top: 5px; line-height: 1.5; }
+  .item-tag { display: inline-block; font-family: var(--mono); font-size: 9px; letter-spacing: 1px; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; margin-top: 6px; margin-right: 4px; }
   .tag-urgent  { background: rgba(231,76,60,0.2);  color: #FF8A80; }
   .tag-review  { background: rgba(243,156,18,0.2); color: #FFD580; }
   .tag-annual  { background: rgba(74,158,255,0.2); color: #80BDFF; }
   .tag-data    { background: rgba(52,211,153,0.2); color: #6EEAC3; }
   .tag-advance { background: rgba(167,139,250,0.2); color: #C4B5FD; }
+  .item-data { font-family: var(--mono); font-size: 11px; color: var(--gold-light); background: rgba(201,168,76,0.1); border-radius: 5px; padding: 5px 9px; margin-top: 7px; display: inline-block; }
 
-  .item-data {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--gold-light);
-    background: rgba(201,168,76,0.1);
-    border-radius: 5px;
-    padding: 5px 9px;
-    margin-top: 7px;
-    display: inline-block;
-  }
-
-  /* ── MINI CHART ── */
+  /* ── CHART ── */
   .chart-wrap {
     background: var(--navy-mid);
     border: 1px solid rgba(255,255,255,0.07);
     border-radius: 12px;
     padding: 20px;
     margin-bottom: 28px;
+    position: relative;
   }
+  .chart-title { font-size: 12px; font-family: var(--mono); color: var(--silver); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; }
+  canvas { width: 100% !important; cursor: crosshair; display: block; }
 
-  .chart-title {
-    font-size: 12px;
-    font-family: var(--mono);
-    color: var(--silver);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-bottom: 14px;
+  /* ── TOOLTIP ── */
+  #chartTooltip {
+    position: absolute;
+    background: #0A1628;
+    border: 1px solid rgba(52,211,153,0.55);
+    border-radius: 8px;
+    padding: 9px 13px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.1s ease;
+    z-index: 20;
+    white-space: nowrap;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
   }
+  #chartTooltip.visible { opacity: 1; }
+  .tt-date { font-family: var(--mono); font-size: 10px; color: var(--silver); letter-spacing: 0.5px; margin-bottom: 4px; }
+  .tt-price { font-family: var(--mono); font-size: 15px; font-weight: 600; color: #34D399; }
 
-  canvas { width: 100% !important; }
-
-  /* ── FOOTER ── */
-  .footer-note {
-    text-align: center;
-    font-size: 11px;
-    color: var(--silver);
-    margin-top: 32px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255,255,255,0.07);
-    font-family: var(--mono);
-  }
+  .footer-note { text-align: center; font-size: 11px; color: var(--silver); margin-top: 32px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.07); font-family: var(--mono); }
 </style>
 </head>
 <body>
 
-<!-- TICKER BAR -->
 <div class="ticker-bar">
   <div class="ticker-inner" id="tickerInner"></div>
 </div>
 
-<!-- HEADER -->
 <header>
   <div class="header-row">
     <div>
@@ -456,17 +198,17 @@
 </header>
 
 <main>
-
-  <!-- FUND SNAPSHOT -->
   <div class="snapshot-grid" id="snapshotGrid"></div>
 
-  <!-- MINI CHART -->
-  <div class="chart-wrap">
+  <div class="chart-wrap" id="chartWrap">
     <div class="chart-title">📈 C Fund · 90-Day Price Trend</div>
     <canvas id="miniChart" height="120"></canvas>
+    <div id="chartTooltip">
+      <div class="tt-date" id="ttDate"></div>
+      <div class="tt-price" id="ttPrice"></div>
+    </div>
   </div>
 
-  <!-- SECTIONS -->
   <div id="checklistRoot"></div>
 
   <div class="footer-note">
@@ -475,16 +217,14 @@
 </main>
 
 <script>
-// ── RAW DATA (latest prices from CSV) ──
 const funds = [
-  { id: 'g', name: 'G', label: 'Govt Securities', price: 19.9695, prev: 19.9670, color: '#4A9EFF' },
-  { id: 'f', name: 'F', label: 'Fixed Income',    price: 20.9801, prev: 21.0045, color: '#A78BFA' },
-  { id: 'c', name: 'C', label: 'Common Stock',    price: 119.5288, prev: 118.9254, color: '#34D399' },
-  { id: 's', name: 'S', label: 'Small/Mid Cap',   price: 114.9835, prev: 114.4059, color: '#F59E0B' },
-  { id: 'i', name: 'I', label: 'International',   price: 64.1908, prev: 63.6598, color: '#F472B6' },
+  { id: 'g', name: 'G', label: 'Govt Securities', price: 19.9695,  prev: 19.9670  },
+  { id: 'f', name: 'F', label: 'Fixed Income',    price: 20.9801,  prev: 21.0045  },
+  { id: 'c', name: 'C', label: 'Common Stock',    price: 119.5288, prev: 118.9254 },
+  { id: 's', name: 'S', label: 'Small/Mid Cap',   price: 114.9835, prev: 114.4059 },
+  { id: 'i', name: 'I', label: 'International',   price: 64.1908,  prev: 63.6598  },
 ];
 
-// C Fund prices last ~20 trading days (from CSV)
 const cTrend = [
   {d:'May 19',v:118.17},{d:'May 20',v:119.44},{d:'May 21',v:119.66},{d:'May 22',v:120.12},
   {d:'May 26',v:120.86},{d:'May 27',v:120.88},{d:'May 28',v:121.58},{d:'May 29',v:121.85},
@@ -493,11 +233,13 @@ const cTrend = [
   {d:'Jun 11',v:118.93},{d:'Jun 12',v:119.53}
 ];
 
-// ── TICKER ──
+// Chart layout — saved so tooltip handler can use it
+let chartLayout = null;
+
 function buildTicker() {
   const items = funds.map(f => {
     const chg = f.price - f.prev;
-    const pct = (chg / f.prev * 100);
+    const pct = chg / f.prev * 100;
     const dir = chg >= 0 ? 'up' : 'down';
     const arrow = chg >= 0 ? '▲' : '▼';
     return `<span class="ticker-item">
@@ -507,17 +249,15 @@ function buildTicker() {
       <span class="ticker-dot">·</span>
     </span>`;
   });
-  // duplicate for seamless scroll
   const html = items.join('') + items.join('');
   document.getElementById('tickerInner').innerHTML = html;
 }
 
-// ── FUND SNAPSHOT CARDS ──
 function buildSnapshot() {
   const grid = document.getElementById('snapshotGrid');
   funds.forEach(f => {
     const chg = f.price - f.prev;
-    const pct = (chg / f.prev * 100);
+    const pct = chg / f.prev * 100;
     const dir = chg >= 0 ? 'up' : 'down';
     const arrow = chg >= 0 ? '▲' : '▼';
     grid.innerHTML += `
@@ -530,15 +270,15 @@ function buildSnapshot() {
   });
 }
 
-// ── MINI CHART (vanilla canvas) ──
-function buildChart() {
+// ── DRAW CHART (optionally with a highlighted index) ──
+function drawChart(highlightIdx) {
   const canvas = document.getElementById('miniChart');
   const dpr = window.devicePixelRatio || 1;
   const W = canvas.parentElement.clientWidth - 40;
   const H = 120;
-  canvas.width = W * dpr;
+  canvas.width  = W * dpr;
   canvas.height = H * dpr;
-  canvas.style.width = W + 'px';
+  canvas.style.width  = W + 'px';
   canvas.style.height = H + 'px';
   const ctx = canvas.getContext('2d');
   ctx.scale(dpr, dpr);
@@ -553,7 +293,10 @@ function buildChart() {
   const toX = i => pad.l + (i / (vals.length - 1)) * cw;
   const toY = v => pad.t + ch - ((v - mn) / (mx - mn)) * ch;
 
-  // Grid lines
+  // Save layout for mouse handler
+  chartLayout = { pad, cw, ch, mn, mx, W, H, toX, toY };
+
+  // Grid
   ctx.strokeStyle = 'rgba(255,255,255,0.06)';
   ctx.lineWidth = 1;
   [0, 0.25, 0.5, 0.75, 1].forEach(t => {
@@ -597,7 +340,7 @@ function buildChart() {
   ctx.lineJoin = 'round';
   ctx.stroke();
 
-  // X labels (every ~4)
+  // X labels
   ctx.fillStyle = '#A8B8CC';
   ctx.textAlign = 'center';
   cTrend.forEach((d, i) => {
@@ -606,221 +349,148 @@ function buildChart() {
     }
   });
 
-  // Dot at latest
-  const lx = toX(vals.length - 1), ly = toY(vals[vals.length - 1]);
-  ctx.beginPath();
-  ctx.arc(lx, ly, 4, 0, Math.PI * 2);
-  ctx.fillStyle = '#34D399';
-  ctx.fill();
+  // Latest dot (default) OR hover state
+  if (highlightIdx === undefined || highlightIdx === null) {
+    // Static end dot
+    const lx = toX(vals.length - 1), ly = toY(vals[vals.length - 1]);
+    ctx.beginPath(); ctx.arc(lx, ly, 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#34D399'; ctx.fill();
+  } else {
+    // Crosshair line
+    const hx = toX(highlightIdx);
+    ctx.save();
+    ctx.strokeStyle = 'rgba(52,211,153,0.3)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(hx, pad.t); ctx.lineTo(hx, pad.t + ch); ctx.stroke();
+    ctx.setLineDash([]); ctx.restore();
+
+    // Hover dot with ring
+    const hx2 = toX(highlightIdx), hy = toY(vals[highlightIdx]);
+    ctx.beginPath(); ctx.arc(hx2, hy, 8, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(52,211,153,0.18)'; ctx.fill();
+    ctx.beginPath(); ctx.arc(hx2, hy, 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#34D399'; ctx.fill();
+  }
 }
 
-// ── CHECKLIST DATA ──
+function setupChartTooltip() {
+  const canvas  = document.getElementById('miniChart');
+  const tooltip = document.getElementById('chartTooltip');
+  const ttDate  = document.getElementById('ttDate');
+  const ttPrice = document.getElementById('ttPrice');
+  const wrap    = document.getElementById('chartWrap');
+
+  canvas.addEventListener('mousemove', e => {
+    if (!chartLayout) return;
+    const { pad, cw } = chartLayout;
+    const rect   = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+
+    // Outside plot area → hide
+    if (mouseX < pad.l || mouseX > pad.l + cw) {
+      tooltip.classList.remove('visible');
+      drawChart();
+      return;
+    }
+
+    const n   = cTrend.length;
+    const idx = Math.max(0, Math.min(n - 1, Math.round((mouseX - pad.l) / cw * (n - 1))));
+
+    ttDate.textContent  = cTrend[idx].d + ', 2026';
+    ttPrice.textContent = '$' + cTrend[idx].v.toFixed(2);
+    drawChart(idx);
+
+    // Position tooltip — flip left when near right edge
+    const wrapRect = wrap.getBoundingClientRect();
+    const ttW  = tooltip.offsetWidth || 130;
+    const ttH  = tooltip.offsetHeight || 52;
+    let left   = (e.clientX - wrapRect.left) + 14;
+    let top    = (e.clientY - wrapRect.top)  - ttH / 2;
+    if (left + ttW > wrap.offsetWidth - 8) left = (e.clientX - wrapRect.left) - ttW - 14;
+    if (top < 8) top = 8;
+
+    tooltip.style.left = left + 'px';
+    tooltip.style.top  = top  + 'px';
+    tooltip.classList.add('visible');
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    tooltip.classList.remove('visible');
+    drawChart();
+  });
+}
+
+// ── CHECKLIST ──
 const sections = [
   {
-    id: 'now',
-    icon: '🔴',
-    iconClass: 'blue',
+    id: 'now', icon: '🔴', iconClass: 'blue',
     title: 'Check Right Now',
     sub: 'Immediate actions based on current fund prices',
     items: [
-      {
-        id: 'n1',
-        title: 'Review your current fund allocation vs. today\'s prices',
-        desc: 'C Fund is at $119.53 (up 0.51%) and S Fund at $114.98 (up 0.50%). Check if your equity exposure is aligned with your risk tolerance.',
-        tags: ['urgent'],
-        data: 'C: $119.5288 · S: $114.9835 · Jun 12'
-      },
-      {
-        id: 'n2',
-        title: 'Verify your contribution percentage for this pay period',
-        desc: 'Log in to TSP.gov or your agency\'s payroll system to confirm your election is active and the amount is correct.',
-        tags: ['urgent']
-      },
-      {
-        id: 'n3',
-        title: 'Check if you\'re on track to hit the IRS contribution limit',
-        desc: '2025 elective deferral limit is $23,500 ($31,000 if 50+). Divide your total by your remaining pay periods to see if you\'ll hit the cap.',
-        tags: ['urgent', 'annual']
-      },
-      {
-        id: 'n4',
-        title: 'Confirm your agency matching contributions are posting',
-        desc: 'FERS employees get 1% automatic + up to 4% matching. Log into TSP and verify both agency contributions appear in your account.',
-        tags: ['urgent']
-      },
-      {
-        id: 'n5',
-        title: 'Note the F Fund dip: $20.98 (down 0.12% today)',
-        desc: 'The F Fund (Fixed Income) slipped slightly today while G Fund held at $19.97. If you\'re bond-heavy, monitor for trend continuation.',
-        tags: ['review', 'data'],
-        data: 'F: $20.9801 ▼ · G: $19.9695 ▲ today'
-      }
+      { id: 'n1', title: "Review your current fund allocation vs. today's prices", desc: "C Fund is at $119.53 (up 0.51%) and S Fund at $114.98 (up 0.50%). Check if your equity exposure is aligned with your risk tolerance.", tags: ['urgent'], data: 'C: $119.5288 · S: $114.9835 · Jun 12' },
+      { id: 'n2', title: "Verify your contribution percentage for this pay period", desc: "Log in to TSP.gov or your agency's payroll system to confirm your election is active and the amount is correct.", tags: ['urgent'] },
+      { id: 'n3', title: "Check if you're on track to hit the IRS contribution limit", desc: "2025 elective deferral limit is $23,500 ($31,000 if 50+). Divide your total by your remaining pay periods to see if you'll hit the cap.", tags: ['urgent', 'annual'] },
+      { id: 'n4', title: "Confirm your agency matching contributions are posting", desc: "FERS employees get 1% automatic + up to 4% matching. Log into TSP and verify both agency contributions appear in your account.", tags: ['urgent'] },
+      { id: 'n5', title: "Note the F Fund dip: $20.98 (down 0.12% today)", desc: "The F Fund (Fixed Income) slipped slightly today while G Fund held at $19.97. If you're bond-heavy, monitor for trend continuation.", tags: ['review', 'data'], data: 'F: $20.9801 ▼ · G: $19.9695 ▲ today' }
     ]
   },
   {
-    id: 'weekly',
-    icon: '📋',
-    iconClass: 'amber',
+    id: 'weekly', icon: '📋', iconClass: 'amber',
     title: 'Weekly Review Tasks',
     sub: 'Recurring checks to keep your TSP on track',
     items: [
-      {
-        id: 'w1',
-        title: 'Compare this week\'s fund performance vs. last week',
-        desc: 'C Fund ranged from ~$116.88 to $119.53 this week — a swing of $2.65. Track weekly volatility to gauge your comfort level.',
-        tags: ['review', 'data'],
-        data: 'Week low: $116.88 (Jun 10) · Week high: $119.53 (Jun 12)'
-      },
-      {
-        id: 'w2',
-        title: 'Check your Lifecycle (L) fund target date alignment',
-        desc: 'If you\'re in an L Fund, confirm the target year still matches your planned retirement date. L 2045 is at $20.57, L 2065 at $24.01.',
-        tags: ['review']
-      },
-      {
-        id: 'w3',
-        title: 'Review any pending interfund transfer (IFT)',
-        desc: 'You can make 2 free IFTs per month; additional IFTs must go to G Fund only. Ensure you haven\'t wasted both on minor rebalances.',
-        tags: ['review', 'urgent']
-      },
-      {
-        id: 'w4',
-        title: 'Note S Fund price trend: up ~1.4% since June 10 low',
-        desc: 'S Fund hit $111.11 on June 10 and has recovered to $114.98. A short-term bounce — decide if this changes your small-cap position.',
-        tags: ['data', 'review'],
-        data: 'S Fund Jun 10: $111.11 → Jun 12: $114.98 (+3.5%)'
-      }
+      { id: 'w1', title: "Compare this week's fund performance vs. last week", desc: "C Fund ranged from ~$116.88 to $119.53 this week — a swing of $2.65. Track weekly volatility to gauge your comfort level.", tags: ['review', 'data'], data: 'Week low: $116.88 (Jun 10) · Week high: $119.53 (Jun 12)' },
+      { id: 'w2', title: "Check your Lifecycle (L) fund target date alignment", desc: "If you're in an L Fund, confirm the target year still matches your planned retirement date. L 2045 is at $20.57, L 2065 at $24.01.", tags: ['review'] },
+      { id: 'w3', title: "Review any pending interfund transfer (IFT)", desc: "You can make 2 free IFTs per month; additional IFTs must go to G Fund only. Ensure you haven't wasted both on minor rebalances.", tags: ['review', 'urgent'] },
+      { id: 'w4', title: "Note S Fund price trend: up ~1.4% since June 10 low", desc: "S Fund hit $111.11 on June 10 and has recovered to $114.98. A short-term bounce — decide if this changes your small-cap position.", tags: ['data', 'review'], data: 'S Fund Jun 10: $111.11 → Jun 12: $114.98 (+3.5%)' }
     ]
   },
   {
-    id: 'advance',
-    icon: '🗓️',
-    iconClass: 'purple',
+    id: 'advance', icon: '🗓️', iconClass: 'purple',
     title: 'Prepare in Advance',
     sub: 'Actions to complete before key TSP deadlines',
     items: [
-      {
-        id: 'a1',
-        title: 'Set your catch-up contribution election (if age 50+)',
-        desc: 'SECURE 2.0 allows $7,500 additional in catch-up contributions for 2025. Set up via your payroll system — doesn\'t auto-carry from prior year.',
-        tags: ['advance', 'annual']
-      },
-      {
-        id: 'a2',
-        title: 'Plan your December contribution adjustments',
-        desc: 'If you increase contributions in December to hit annual limits, do it before the payroll cutoff — typically 2 weeks before year-end.',
-        tags: ['advance', 'annual']
-      },
-      {
-        id: 'a3',
-        title: 'Review beneficiary designations on file',
-        desc: 'TSP beneficiary designations don\'t update automatically after life events. Log in, navigate to Beneficiaries, and verify names and percentages.',
-        tags: ['advance']
-      },
-      {
-        id: 'a4',
-        title: 'Decide on Roth vs. Traditional contribution mix',
-        desc: 'If you expect higher taxes in retirement, increasing Roth TSP contributions now locks in today\'s rates. This election is changed via payroll, not TSP.gov.',
-        tags: ['advance', 'annual']
-      },
-      {
-        id: 'a5',
-        title: 'Research whether a TSP loan makes sense before taking one',
-        desc: 'TSP loans remove money from the market during repayment. With C Fund up over 40% since April 2024 lows, the opportunity cost can be significant.',
-        tags: ['advance', 'review'],
-        data: 'C Fund Apr 2024: ~$80 → Jun 2026: $119.53 (+49%)'
-      },
-      {
-        id: 'a6',
-        title: 'Prepare documentation for a TSP withdrawal or distribution',
-        desc: 'In-service withdrawals require specific forms. Age-based (59½+) withdrawals are allowed once. Gather your agency ID, personnel records, and banking info.',
-        tags: ['advance']
-      }
+      { id: 'a1', title: "Set your catch-up contribution election (if age 50+)", desc: "SECURE 2.0 allows $7,500 additional in catch-up contributions for 2025. Set up via your payroll system — doesn't auto-carry from prior year.", tags: ['advance', 'annual'] },
+      { id: 'a2', title: "Plan your December contribution adjustments", desc: "If you increase contributions in December to hit annual limits, do it before the payroll cutoff — typically 2 weeks before year-end.", tags: ['advance', 'annual'] },
+      { id: 'a3', title: "Review beneficiary designations on file", desc: "TSP beneficiary designations don't update automatically after life events. Log in, navigate to Beneficiaries, and verify names and percentages.", tags: ['advance'] },
+      { id: 'a4', title: "Decide on Roth vs. Traditional contribution mix", desc: "If you expect higher taxes in retirement, increasing Roth TSP contributions now locks in today's rates. This election is changed via payroll, not TSP.gov.", tags: ['advance', 'annual'] },
+      { id: 'a5', title: "Research whether a TSP loan makes sense before taking one", desc: "TSP loans remove money from the market during repayment. With C Fund up over 40% since April 2024 lows, the opportunity cost can be significant.", tags: ['advance', 'review'], data: 'C Fund Apr 2024: ~$80 → Jun 2026: $119.53 (+49%)' },
+      { id: 'a6', title: "Prepare documentation for a TSP withdrawal or distribution", desc: "In-service withdrawals require specific forms. Age-based (59½+) withdrawals are allowed once. Gather your agency ID, personnel records, and banking info.", tags: ['advance'] }
     ]
   },
   {
-    id: 'rebalance',
-    icon: '⚖️',
-    iconClass: 'green',
+    id: 'rebalance', icon: '⚖️', iconClass: 'green',
     title: 'Rebalancing Decisions',
     sub: 'Fund allocation actions based on 2+ years of price data',
     items: [
-      {
-        id: 'r1',
-        title: 'Evaluate if equity funds are overweight after the run-up',
-        desc: 'C Fund has risen from ~$78 (Feb 2024) to $119.53 today — a 53% gain. Your equity allocation % may now exceed your target due to price appreciation alone.',
-        tags: ['review', 'data'],
-        data: 'C Fund Feb 2024: ~$78 → Jun 2026: $119.53 (+53%)'
-      },
-      {
-        id: 'r2',
-        title: 'Assess G Fund as a volatility buffer during pullbacks',
-        desc: 'G Fund (Govt Securities) is the only fund with no daily price risk. It grew steadily from ~$18.08 (Feb 2024) to $19.97 today, providing ~10.5% over 2 years.',
-        tags: ['review', 'data'],
-        data: 'G Fund Feb 2024: $18.08 → Jun 2026: $19.97 (+10.5%)'
-      },
-      {
-        id: 'r3',
-        title: 'Compare I Fund vs. C Fund performance and decide on international exposure',
-        desc: 'I Fund (International) rose from ~$40 to $64.19, a 60% gain vs. C Fund\'s 53% — international has slightly outperformed. Reassess if your allocation reflects this.',
-        tags: ['review', 'data'],
-        data: 'I Fund: +60% · C Fund: +53% since Feb 2024'
-      },
-      {
-        id: 'r4',
-        title: 'Set a rebalancing trigger rule (not just a date)',
-        desc: 'Example: "If any fund drifts more than 5% from my target allocation, submit an IFT." Rules-based rebalancing removes emotion from timing decisions.',
-        tags: ['advance']
-      }
+      { id: 'r1', title: "Evaluate if equity funds are overweight after the run-up", desc: "C Fund has risen from ~$78 (Feb 2024) to $119.53 today — a 53% gain. Your equity allocation % may now exceed your target due to price appreciation alone.", tags: ['review', 'data'], data: 'C Fund Feb 2024: ~$78 → Jun 2026: $119.53 (+53%)' },
+      { id: 'r2', title: "Assess G Fund as a volatility buffer during pullbacks", desc: "G Fund (Govt Securities) is the only fund with no daily price risk. It grew steadily from ~$18.08 (Feb 2024) to $19.97 today, providing ~10.5% over 2 years.", tags: ['review', 'data'], data: 'G Fund Feb 2024: $18.08 → Jun 2026: $19.97 (+10.5%)' },
+      { id: 'r3', title: "Compare I Fund vs. C Fund performance and decide on international exposure", desc: "I Fund (International) rose from ~$40 to $64.19, a 60% gain vs. C Fund's 53% — international has slightly outperformed. Reassess if your allocation reflects this.", tags: ['review', 'data'], data: 'I Fund: +60% · C Fund: +53% since Feb 2024' },
+      { id: 'r4', title: "Set a rebalancing trigger rule (not just a date)", desc: 'Example: "If any fund drifts more than 5% from my target allocation, submit an IFT." Rules-based rebalancing removes emotion from timing decisions.', tags: ['advance'] }
     ]
   },
   {
-    id: 'retire',
-    icon: '🏁',
-    iconClass: 'pink',
+    id: 'retire', icon: '🏁', iconClass: 'pink',
     title: 'Retirement Readiness',
     sub: 'Long-range preparation checklist',
     items: [
-      {
-        id: 'rr1',
-        title: 'Run a TSP projection using your current balance and contribution rate',
-        desc: 'Use TSP\'s online calculator at tsp.gov. Input your balance, annual return assumption (7–8% is common for a stock-heavy mix), and years to retirement.',
-        tags: ['advance', 'annual']
-      },
-      {
-        id: 'rr2',
-        title: 'Understand your withdrawal options before you retire',
-        desc: 'Options include: monthly payments, life annuity, lump sum, or a combination. Each has different tax implications. Research at least 2 years before your target date.',
-        tags: ['advance']
-      },
-      {
-        id: 'rr3',
-        title: 'Coordinate TSP income with FERS pension and Social Security',
-        desc: 'Map out how TSP withdrawals interact with your expected FERS annuity and Social Security benefits to estimate your effective tax bracket in retirement.',
-        tags: ['advance', 'annual']
-      },
-      {
-        id: 'rr4',
-        title: 'Check if your agency qualifies for the Special Retirement Supplement',
-        desc: 'Some FERS employees can receive SRS between retirement and age 62. This bridges income before Social Security kicks in — verify your eligibility.',
-        tags: ['advance']
-      }
+      { id: 'rr1', title: "Run a TSP projection using your current balance and contribution rate", desc: "Use TSP's online calculator at tsp.gov. Input your balance, annual return assumption (7–8% is common for a stock-heavy mix), and years to retirement.", tags: ['advance', 'annual'] },
+      { id: 'rr2', title: "Understand your withdrawal options before you retire", desc: "Options include: monthly payments, life annuity, lump sum, or a combination. Each has different tax implications. Research at least 2 years before your target date.", tags: ['advance'] },
+      { id: 'rr3', title: "Coordinate TSP income with FERS pension and Social Security", desc: "Map out how TSP withdrawals interact with your expected FERS annuity and Social Security benefits to estimate your effective tax bracket in retirement.", tags: ['advance', 'annual'] },
+      { id: 'rr4', title: "Check if your agency qualifies for the Special Retirement Supplement", desc: "Some FERS employees can receive SRS between retirement and age 62. This bridges income before Social Security kicks in — verify your eligibility.", tags: ['advance'] }
     ]
   }
 ];
 
-// ── BUILD CHECKLIST ──
 function buildChecklist() {
-  const root = document.getElementById('checklistRoot');
+  const root   = document.getElementById('checklistRoot');
   const stored = JSON.parse(localStorage.getItem('tspChecklist') || '{}');
-
   sections.forEach(sec => {
     const el = document.createElement('div');
     el.className = 'section';
     el.id = 'sec-' + sec.id;
-
     const doneInSec = sec.items.filter(it => stored[it.id]).length;
-
     el.innerHTML = `
       <div class="section-header" onclick="toggleSection('${sec.id}')">
         <div class="section-icon ${sec.iconClass}">${sec.icon}</div>
@@ -833,15 +503,14 @@ function buildChecklist() {
       </div>
       <div class="section-body" id="body-${sec.id}">
         ${sec.items.map(it => renderItem(it, stored[it.id])).join('')}
-      </div>
-    `;
+      </div>`;
     root.appendChild(el);
   });
   updateProgress();
 }
 
 function renderItem(it, checked) {
-  const cls = checked ? 'item checked' : 'item';
+  const cls  = checked ? 'item checked' : 'item';
   const tags = (it.tags || []).map(t => `<span class="item-tag tag-${t}">${t}</span>`).join('');
   const data = it.data ? `<div class="item-data">📊 ${it.data}</div>` : '';
   return `
@@ -859,11 +528,8 @@ function toggleItem(id) {
   const stored = JSON.parse(localStorage.getItem('tspChecklist') || '{}');
   stored[id] = !stored[id];
   localStorage.setItem('tspChecklist', JSON.stringify(stored));
-
   const el = document.getElementById('item-' + id);
   if (stored[id]) el.classList.add('checked'); else el.classList.remove('checked');
-
-  // Update section count
   sections.forEach(sec => {
     if (sec.items.find(it => it.id === id)) {
       const done = sec.items.filter(it => stored[it.id]).length;
@@ -879,22 +545,24 @@ function toggleSection(id) {
 
 function updateProgress() {
   const stored = JSON.parse(localStorage.getItem('tspChecklist') || '{}');
-  const total = sections.reduce((s, sec) => s + sec.items.length, 0);
-  const done = Object.values(stored).filter(Boolean).length;
-  const pct = Math.round((done / total) * 100);
+  const total  = sections.reduce((s, sec) => s + sec.items.length, 0);
+  const done   = Object.values(stored).filter(Boolean).length;
+  const pct    = Math.round((done / total) * 100);
   document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressPct').textContent  = pct + '%';
 }
 
 // ── INIT ──
 buildTicker();
 buildSnapshot();
 buildChecklist();
-window.addEventListener('load', buildChart);
+window.addEventListener('load', () => {
+  drawChart();
+  setupChartTooltip();
+});
 window.addEventListener('resize', () => {
-  const c = document.getElementById('miniChart');
-  c.style.width = '';
-  buildChart();
+  document.getElementById('miniChart').style.width = '';
+  drawChart();
 });
 </script>
 </body>
