@@ -232,7 +232,7 @@ let cTrend = [
   {d:'Apr 17',v:96.38}, {d:'Apr 22',v:99.44}, {d:'Apr 25',v:101.82},{d:'Apr 28',v:103.55},
   {d:'May 1', v:105.10},{d:'May 5', v:107.33},{d:'May 8', v:109.67},{d:'May 12',v:111.20},
   {d:'May 15',v:113.44},{d:'May 19',v:118.17},{d:'May 20',v:119.44},{d:'May 21',v:119.66},
-  {d:'May 22',v:120.12},{d:'May 26',v:120.86},{d:'May 27',v:120.88},{d:'May 28',v:121.58},
+  {d(--),v:120.12},{d:'May 26',v:120.86},{d:'May 27',v:120.88},{d:'May 28',v:121.58},
   {d:'May 29',v:121.85},{d:'Jun 1', v:122.18},{d:'Jun 2', v:122.34},{d:'Jun 3', v:121.44},
   {d:'Jun 4', v:121.95},{d:'Jun 5', v:118.74},{d:'Jun 8', v:119.10},{d:'Jun 9', v:118.80},
   {d:'Jun 10',v:116.88},{d:'Jun 11',v:118.93},{d:'Jun 12',v:119.53}
@@ -240,93 +240,107 @@ let cTrend = [
 
 let chartLayout = null;
 
-// ── FETCH LATEST PRICES VIA CLAUDE API (web search) ──
+// ── BROWSER NATIVE ENGINE RUNNING DIRECTLY AGAINST TSP.GOV OPEN DATA ENDPOINT ──
 async function fetchLatestPrices() {
-  const btn    = document.getElementById('refreshBtn');
+  const btn = document.getElementById('refreshBtn');
   const status = document.getElementById('refreshStatus');
 
   btn.disabled = true;
   btn.classList.add('spinning');
-  setStatus('loading', '⏳ Fetching latest TSP C Fund prices via web search…');
+  setStatus('loading', '⏳ Syncing native dataset from TSP.gov CSV feed...');
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1000,
-        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
-        system: `You are a financial data assistant. The user wants the latest TSP (Thrift Savings Plan) C Fund share prices for the past 90 days.
-Search for "TSP C Fund share price history 2026 site:tsp.gov" or "TSP fund prices June 2026".
-Return ONLY a valid JSON object — no markdown, no backticks, no explanation — in this exact format:
-{
-  "lastDate": "Jun 17, 2026",
-  "prices": [
-    {"d": "Mar 19", "v": 106.93},
-    {"d": "Mar 24", "v": 104.28}
-  ],
-  "latestPrice": 119.53,
-  "prevPrice": 118.93,
-  "source": "tsp.gov"
-}
-Include roughly 30-40 data points spaced across the 90-day window. If you cannot find real data, return exactly: {"error": "no_data"}`,
-        messages: [{ role: 'user', content: 'Fetch the latest TSP C Fund 90-day price history as of today June 17 2026. Return only JSON.' }]
-      })
+    // Utilize a public proxy to access the open data endpoint seamlessly from browser front-end
+    const proxyUrl = "https://corsproxy.io/?";
+    const targetUrl = "https://www.tsp.gov/api/share-prices.csv";
+    
+    const response = await fetch(proxyUrl + encodeURIComponent(targetUrl));
+    if (!response.ok) throw new Error(`Server returned HTTP code ${response.status}`);
+    
+    const rawCsvText = await response.text();
+    const rows = rawCsvText.split('\n').map(row => row.trim()).filter(row => row.length > 0);
+    
+    if (rows.length < 2) throw new Error("Parsed data footprint missing required fields.");
+
+    // Parse Headers to identify positions
+    const headers = rows[0].split(',').map(h => h.replace(/["']/g, "").trim().toLowerCase());
+    const dateIdx = headers.indexOf("date");
+    const cIdx = headers.indexOf("c");
+    const gIdx = headers.indexOf("g");
+    const fIdx = headers.indexOf("f");
+    const sIdx = headers.indexOf("s");
+    const iIdx = headers.indexOf("i");
+
+    if (dateIdx === -1 || cIdx === -1) throw new Error("Target indices mismatched or corrupt.");
+
+    let cleanHistory = [];
+    
+    // Process matching data entries from the official log
+    for (let i = 1; i < rows.length; i++) {
+      const columns = rows[i].split(',');
+      if (columns.length <= Math.max(dateIdx, cIdx)) continue;
+      
+      const rawDateStr = columns[dateIdx].replace(/["']/g, "").trim(); // YYYY-MM-DD expected
+      const cVal = parseFloat(columns[cIdx]);
+      
+      if (!rawDateStr || isNaN(cVal)) continue;
+
+      // Extract short formats for display components (e.g. "Jun 12")
+      const dateObj = new Date(rawDateStr + 'T00:00:00');
+      if (isNaN(dateObj.getTime())) continue;
+
+      const formattedLabel = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      
+      cleanHistory.push({
+        fullDate: dateObj,
+        d: formattedLabel,
+        v: cVal,
+        rawRow: columns
+      });
+    }
+
+    // Sort Chronologically
+    cleanHistory.sort((a, b) => a.fullDate - b.fullDate);
+
+    if (cleanHistory.length === 0) throw new Error("Failed to process parsing rules against records.");
+
+    // Extract the most current 35 records to build the 90-day window metrics
+    const chartWindow = cleanHistory.slice(-35);
+    cTrend = chartWindow.map(p => ({ d: p.d, v: p.v }));
+
+    // Extract latest index items to live update core balance blocks
+    const absoluteLatest = cleanHistory[cleanHistory.length - 1];
+    const absolutePrev = cleanHistory[cleanHistory.length - 2] || absoluteLatest;
+
+    const fundIdMap = { g: gIdx, f: fIdx, c: cIdx, s: sIdx, i: iIdx };
+    funds.forEach(fund => {
+      const targetColumnIdx = fundIdMap[fund.id];
+      if (targetColumnIdx !== -1) {
+        const livePrice = parseFloat(absoluteLatest.rawRow[targetColumnIdx]);
+        const pastPrice = parseFloat(absolutePrev.rawRow[targetColumnIdx]);
+        if (!isNaN(livePrice) && !isNaN(pastPrice)) {
+          fund.price = livePrice;
+          fund.prev = pastPrice;
+        }
+      }
     });
 
-    if (!response.ok) throw new Error(`API error ${response.status}`);
-    const data = await response.json();
-
-    // Extract text blocks (web_search tool_use response may have multiple blocks)
-    const textBlocks = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('');
-
-    // Try to parse JSON from response
-    const jsonMatch = textBlocks.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error('No JSON found in response');
-
-    const parsed = JSON.parse(jsonMatch[0]);
-
-    if (parsed.error === 'no_data') {
-      setStatus('error', '⚠ No live data available — showing most recent cached prices.');
-      return;
-    }
-
-    // Validate structure
-    if (!Array.isArray(parsed.prices) || parsed.prices.length < 5) {
-      throw new Error('Invalid price data structure');
-    }
-
-    // Update chart data
-    cTrend = parsed.prices.map(p => ({ d: p.d, v: parseFloat(p.v) }));
-
-    // Update fund cards if new price available
-    if (parsed.latestPrice) {
-      const cFund = funds.find(f => f.id === 'c');
-      if (cFund) {
-        cFund.prev  = parsed.prevPrice || cFund.price;
-        cFund.price = parsed.latestPrice;
-        document.getElementById('snapshotGrid').innerHTML = '';
-        buildSnapshot();
-        buildTicker();
-      }
-    }
-
-    // Redraw chart
+    // Rebuild global layout elements
+    document.getElementById('snapshotGrid').innerHTML = '';
+    buildSnapshot();
+    buildTicker();
     drawChart();
 
-    // Update labels
-    const now = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    document.getElementById('lastUpdatedLabel').textContent = `Last updated: ${now}`;
+    const updateStamp = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    document.getElementById('lastUpdatedLabel').textContent = `Last updated: ${updateStamp}`;
     document.getElementById('footerNote').textContent =
-      `Data sourced from ${parsed.source || 'TSP.gov via web search'} · Updated ${now} · Click items to mark complete`;
+      `Data sourced from TSP.gov Live API Feed · Updated ${updateStamp} · Click items to mark complete`;
 
-    const lastPoint = cTrend[cTrend.length - 1];
-    setStatus('success', `✓ Chart updated — ${cTrend.length} data points through ${lastPoint.d} · C Fund: $${lastPoint.v.toFixed(4)}`);
+    setStatus('success', `✓ Live feed processed — ${cTrend.length} ticks mapped. C Fund current position: $${absoluteLatest.v.toFixed(4)}`);
 
   } catch (err) {
-    console.error('Refresh error:', err);
-    setStatus('error', `✗ Refresh failed: ${err.message}. Showing cached data.`);
+    console.error('Core engine network failure details:', err);
+    setStatus('error', `✗ Sync issue: ${err.message}. Displaying local session configurations instead.`);
   } finally {
     btn.disabled = false;
     btn.classList.remove('spinning');
@@ -565,7 +579,7 @@ const sections = [
 ];
 
 function buildChecklist() {
-  const root   = document.getElementById('checklistRoot');
+  const root = document.getElementById('checklistRoot');
   const stored = JSON.parse(localStorage.getItem('tspChecklist') || '{}');
   sections.forEach(sec => {
     const el = document.createElement('div');
@@ -591,7 +605,7 @@ function buildChecklist() {
 }
 
 function renderItem(it, checked) {
-  const cls  = checked ? 'item checked' : 'item';
+  const cls = checked ? 'item checked' : 'item';
   const tags = (it.tags || []).map(t => `<span class="item-tag tag-${t}">${t}</span>`).join('');
   const data = it.data ? `<div class="item-data">📊 ${it.data}</div>` : '';
   return `
@@ -600,45 +614,60 @@ function renderItem(it, checked) {
       <div class="item-content">
         <div class="item-title">${it.title}</div>
         <div class="item-desc">${it.desc}</div>
-        ${tags}${data}
+        ${tags}
+        ${data}
       </div>
     </div>`;
 }
 
-function toggleItem(id) {
-  const stored = JSON.parse(localStorage.getItem('tspChecklist') || '{}');
-  stored[id] = !stored[id];
-  localStorage.setItem('tspChecklist', JSON.stringify(stored));
-  const el = document.getElementById('item-' + id);
-  if (stored[id]) el.classList.add('checked'); else el.classList.remove('checked');
-  sections.forEach(sec => {
-    if (sec.items.find(it => it.id === id)) {
-      const done = sec.items.filter(it => stored[it.id]).length;
-      document.getElementById('count-' + sec.id).textContent = `${done}/${sec.items.length}`;
-    }
-  });
-  updateProgress();
+function toggleSection(id) {
+  const el = document.getElementById('sec-' + id);
+  el.classList.toggle('collapsed');
 }
 
-function toggleSection(id) {
-  document.getElementById('sec-' + id).classList.toggle('collapsed');
+function toggleItem(id) {
+  const el = document.getElementById('item-' + id);
+  const isChecked = el.classList.toggle('checked');
+  
+  const stored = JSON.parse(localStorage.getItem('tspChecklist') || '{}');
+  if (isChecked) {
+    stored[id] = true;
+  } else {
+    delete stored[id];
+  }
+  localStorage.setItem('tspChecklist', JSON.stringify(stored));
+  
+  // Update section counts
+  sections.forEach(sec => {
+    if (sec.items.some(it => it.id === id)) {
+      const doneInSec = sec.items.filter(it => stored[it.id]).length;
+      document.getElementById(`count-${sec.id}`).textContent = `${doneInSec}/${sec.items.length}`;
+    }
+  });
+  
+  updateProgress();
 }
 
 function updateProgress() {
   const stored = JSON.parse(localStorage.getItem('tspChecklist') || '{}');
-  const total  = sections.reduce((s, sec) => s + sec.items.length, 0);
-  const done   = Object.values(stored).filter(Boolean).length;
-  const pct    = Math.round((done / total) * 100);
+  const totalItems = sections.reduce((sum, sec) => sum + sec.items.length, 0);
+  const totalChecked = Object.keys(stored).length;
+  
+  const pct = totalItems > 0 ? Math.round((totalChecked / totalItems) * 100) : 0;
+  
   document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressPct').textContent  = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
 }
 
-// ── INIT ──
-buildTicker();
-buildSnapshot();
-buildChecklist();
-window.addEventListener('load', () => { drawChart(); setupChartTooltip(); });
-window.addEventListener('resize', () => { document.getElementById('miniChart').style.width = ''; drawChart(); });
+// Window load triggers
+window.addEventListener('resize', () => drawChart());
+window.addEventListener('DOMContentLoaded', () => {
+  buildSnapshot();
+  buildTicker();
+  drawChart();
+  setupChartTooltip();
+  buildChecklist();
+});
 </script>
 </body>
 </html>
